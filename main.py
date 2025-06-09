@@ -71,6 +71,13 @@ def reset_game():
     gold = 400
     waves_started = False
 
+# 타워가 이미 설치되어 있는지 확인하는 함수 추가 (reset_game 함수 위에 추가)
+def is_tower_at_position(x, y):
+    for tower in towers:
+        if abs(tower.x - x) < TILE_SIZE and abs(tower.y - y) < TILE_SIZE:
+            return True
+    return False
+
 # 게임 설정 상수
 MAX_WAVES = 10  # 최대 웨이브 수
 MAX_ESCAPED = 2  # 허용 가능한 탈출 수
@@ -198,7 +205,9 @@ while running:
             else:
                 tower_class = tower_models[selected_tower_index].__class__
                 tower_cost = tower_class.value
-                if is_valid_tower_position((center_x, center_y)) and gold >= tower_cost:
+                if (is_valid_tower_position((center_x, center_y)) and 
+                    gold >= tower_cost and 
+                    not is_tower_at_position(center_x, center_y)):
                     towers.append(tower_class(center_x, center_y))
                     gold -= tower_cost
 
