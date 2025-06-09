@@ -14,6 +14,8 @@ class Tower:
         self.damage = 15
         self.cooldown = 60  # frames
         self.counter = 0
+        self.show_range = True
+        self.range_timer = 180  # 3초 = 60프레임 × 3
 
     def find_target(self, enemies):
         for enemy in enemies:
@@ -38,7 +40,12 @@ class Tower:
         image = pygame.image.load(self.sprite_location)
         image = pygame.transform.scale(image, (50, 50))
         win.blit(image, (self.x - 25, self.y - 25))
-        pygame.draw.circle(win, (0, 0, 255), (self.x, self.y), self.range, 1)
+
+        if self.show_range and self.range_timer > 0:
+            pygame.draw.circle(win, (0, 0, 255), (self.x, self.y), self.range, 1)
+            self.range_timer -= 1
+            if self.range_timer <= 0:
+                self.show_range = False
 
 
 class Bullet:
@@ -84,7 +91,11 @@ class SniperTower(Tower):
         image = pygame.image.load(self.sprite_location)
         image = pygame.transform.scale(image, (50, 50))
         win.blit(image, (self.x - 25, self.y - 25))
-        pygame.draw.circle(win, (255, 255, 0), (self.x, self.y), self.range, 1)
+        if self.show_range and self.range_timer > 0:
+            pygame.draw.circle(win, (255, 255, 0), (self.x, self.y), self.range, 1)
+            self.range_timer -= 1
+            if self.range_timer <= 0:
+                self.show_range = False
 
 
 class SlowTower(Tower):
@@ -108,4 +119,8 @@ class SlowTower(Tower):
         image = pygame.image.load(self.sprite_location)
         image = pygame.transform.scale(image, (50, 50))
         win.blit(image, (self.x - 25, self.y - 25))
-        pygame.draw.circle(win, (0, 255, 255), (self.x, self.y), self.range, 1)
+        if self.show_range and self.range_timer > 0:
+            pygame.draw.circle(win, (0, 255, 255), (self.x, self.y), self.range, 1)
+            self.range_timer -= 1
+            if self.range_timer <= 0:
+                self.show_range = False

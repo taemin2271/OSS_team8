@@ -103,6 +103,8 @@ gold_text.create_image()
 house_image = pygame.image.load("assets/house.png")
 house_image = pygame.transform.scale(house_image, (60, 60))
 house_pos = (path[-1][0] - 30, path[-1][1] - 30)  # 도착 지점 위치
+next_wave_button = Button(pygame.Rect(600, 800, 160, 50), "Next Wave", pygame.Color("green"), pygame.Color("white"), 30)
+next_wave_button.create_image()
 
 # 메인 게임 루프
 running = True
@@ -182,11 +184,6 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
                 game_state = "paused"  # 일시정지 전환
-            elif event.key == pygame.K_SPACE:
-                # 웨이브 시작은 KEYDOWN 이벤트로 처리
-                if wave_manager.is_wave_cleared() and not enemies:
-                    wave_manager.start_next_wave()
-                    waves_started = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             tile_x = mouse_pos[0] // TILE_SIZE
@@ -194,7 +191,12 @@ while running:
             center_x = tile_x * TILE_SIZE + TILE_SIZE // 2
             center_y = tile_y * TILE_SIZE + TILE_SIZE // 2
 
-            if shop_button.rect.collidepoint(mouse_pos):
+            # Next Wave 버튼 클릭 처리 추가
+            if next_wave_button.rect.collidepoint(mouse_pos):
+                if wave_manager.is_wave_cleared() and not enemies:
+                    wave_manager.start_next_wave()
+                    waves_started = True
+            elif shop_button.rect.collidepoint(mouse_pos):
                 shop_open = not shop_open
             elif shop_open:
                 rel_pos = (mouse_pos[0] - shop.rect.x, mouse_pos[1] - shop.rect.y)
@@ -257,7 +259,7 @@ while running:
             bullet.draw(win)
 
 
-    # UI 표시 (골드, 웨이브, 라이프)
+    # UI 표시 (골드, 웨이브, 라이프, Next Wave 버튼)
     gold_text.text = f"Gold: {gold}"
     gold_text.create_image()
     win.blit(gold_text.image, gold_text.rect)
@@ -265,6 +267,14 @@ while running:
     lives_text = font.render(f"Lives: {MAX_ESCAPED - escaped_enemies} / {MAX_ESCAPED}", True, (255, 100, 100))
     win.blit(wave_text, (220, 800))
     win.blit(lives_text, (400, 800))
+    
+    # Next Wave 버튼 활성화/비활성화 상태 표시
+    if wave_manager.is_wave_cleared() and not enemies:
+        next_wave_button.bg_color = pygame.Color("green")
+    else:
+        next_wave_button.bg_color = pygame.Color("darkgray")
+    next_wave_button.create_image()
+    win.blit(next_wave_button.image, next_wave_button.rect)
 
         # ✅ 클리어 조건 검사 위치 (여기 이동!)
     if wave_manager.get_wave_number() == MAX_WAVES and wave_manager.is_wave_cleared() and not enemies:
