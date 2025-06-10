@@ -158,6 +158,7 @@ This is a 2D Tower Defense game built with Pygame. Strategically place towers to
 ```bash
 pip install pygame
 python main.py
+```
 
 ## 📝 TODO: Future Improvements
 - Add more tower and enemy types  
