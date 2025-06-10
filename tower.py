@@ -16,6 +16,11 @@ class Tower:
         self.counter = 0
         self.show_range = True
         self.range_timer = 180  # 3초 = 60프레임 × 3
+        # 업그레이드 관련 속성 추가
+        self.upgrade_level = 0
+        self.max_upgrade = 3
+        self.base_damage = 15
+        self.base_cooldown = 60
 
     def find_target(self, enemies):
         for enemy in enemies:
@@ -36,10 +41,25 @@ class Tower:
                 bullets.append(bullet)
                 self.counter = 0
 
+    def upgrade(self):
+        if self.upgrade_level < self.max_upgrade:
+            self.upgrade_level += 1
+            # 데미지 20% 증가, 공격 속도 15% 증가
+            self.damage = int(self.base_damage * (1 + 0.2 * self.upgrade_level))
+            self.cooldown = int(self.base_cooldown * (1 - 0.15 * self.upgrade_level))
+            return True
+        return False
+
     def draw(self, win):
         image = pygame.image.load(self.sprite_location)
         image = pygame.transform.scale(image, (50, 50))
         win.blit(image, (self.x - 25, self.y - 25))
+        
+        # 업그레이드 레벨 표시
+        if self.upgrade_level > 0:
+            font = pygame.font.Font(None, 20)
+            level_text = font.render(f"+{self.upgrade_level}", True, (255, 215, 0))
+            win.blit(level_text, (self.x + 15, self.y - 25))
 
         if self.show_range and self.range_timer > 0:
             pygame.draw.circle(win, (0, 0, 255), (self.x, self.y), self.range, 1)
@@ -86,6 +106,9 @@ class SniperTower(Tower):
         self.range = 200
         self.damage = 50
         self.cooldown = 120
+        # 업그레이드 기본값 설정
+        self.base_damage = 50
+        self.base_cooldown = 120
 
     def draw(self, win):
         image = pygame.image.load(self.sprite_location)
@@ -109,6 +132,9 @@ class SlowTower(Tower):
         self.range = 120
         self.damage = 5
         self.cooldown = 80
+        # 업그레이드 기본값 설정
+        self.base_damage = 5
+        self.base_cooldown = 80
 
     def shoot(self, target):
         bullet = super().shoot(target)
