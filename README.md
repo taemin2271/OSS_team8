@@ -1,6 +1,7 @@
 <details>
 <summary>Korean README</summary>
-#🏰  2D 타워 디펜스 게임(Korean)
+
+# 🏰  2D 타워 디펜스 게임(Korean)
 
 ## ✨ 개요
 
