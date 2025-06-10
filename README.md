@@ -1,4 +1,6 @@
-# 2D 타워 디펜스 게임
+<details>
+<summary>Korean README</summary>
+#🏰  2D 타워 디펜스 게임(Korean)
 
 ## ✨ 개요
 
@@ -115,3 +117,57 @@ Pygame으로 제작된 2D 타워 디펜스 게임입니다. 전략적으로 타�
 ## 📜 라이선스
 
 MIT License
+
+</details>
+
+<details>
+<summary> English README</summary>
+
+# 🏰 2D Tower Defense Game (English)
+
+## ✨ Overview  
+This is a 2D Tower Defense game built with Pygame. Strategically place towers to block incoming enemies and build the ultimate defense strategy!
+
+## 🎮 Key Features  
+- **Various Towers**: Build towers like Basic, Sniper, and Slow Tower with unique abilities.  
+- **Strategic Wave System**: Use the Wave Manager to face stronger enemies over time.  
+- **Intuitive UI**: Includes shop, gold counter, next wave button, and pause button.  
+- **Multiple Scenes**: Includes Main Menu, Gameplay, Pause, Game Over, and Clear.  
+- **Unique Enemy Units**: Defend against enemies with different health and abilities.  
+- **Strategic Placement Limits**: Towers cannot be placed near paths or on existing towers.
+
+## 🕹️ How to Play  
+1. Select a tower → 2. Place the tower → 3. Start the wave → 4. Defend → 5. Earn gold  
+- Win by clearing all waves  
+- Lose if too many enemies reach the base
+
+## ⚙️ Controls  
+- Mouse: Place towers, click UI buttons  
+- Keyboard: `P` for pause
+
+## 🧩 Game Components  
+- `main.py`: Game loop and state management  
+- `enemies.py`: Enemy unit classes  
+- `tower.py`: Tower and bullet classes  
+- `wave_manager.py`: Manages enemy waves  
+- `UI.py`: Buttons, shop, and text display  
+- `Scene.py`: Game scene layouts
+
+## 🛠️ Installation & Execution  
+```bash
+pip install pygame
+python main.py
+
+## 📝 TODO: Future Improvements
+- Add more tower and enemy types  
+- Implement upgrade system  
+- Add maps and background music  
+- Difficulty settings and tutorial mode  
+
+## 🧑‍💻 Team
+Team8
+
+## 📜 License
+MIT License
+
+</details>
