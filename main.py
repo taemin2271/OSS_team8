@@ -210,13 +210,29 @@ while running:
                     selected_tower_index = selected
                     shop_open = False
             else:
-                tower_class = tower_models[selected_tower_index].__class__
-                tower_cost = tower_class.value
-                if (is_valid_tower_position((center_x, center_y)) and 
-                    gold >= tower_cost and 
-                    not is_tower_at_position(center_x, center_y)):
-                    towers.append(tower_class(center_x, center_y))
-                    gold -= tower_cost
+                # 기존 타워 클릭 확인
+                clicked_tower = None
+                for tower in towers:
+                    if abs(tower.x - center_x) < TILE_SIZE/2 and abs(tower.y - center_y) < TILE_SIZE/2:
+                        clicked_tower = tower
+                        break
+
+                if clicked_tower:
+                    # 업그레이드 시도
+                    tower_cost = tower_models[selected_tower_index].__class__.value
+                    if gold >= tower_cost and clicked_tower.upgrade():
+                        gold -= tower_cost
+                        clicked_tower.show_range = True
+                        clicked_tower.range_timer = 180
+                else:
+                    # 새 타워 설치
+                    tower_class = tower_models[selected_tower_index].__class__
+                    tower_cost = tower_class.value
+                    if (is_valid_tower_position((center_x, center_y)) and 
+                        gold >= tower_cost and 
+                        not is_tower_at_position(center_x, center_y)):
+                        towers.append(tower_class(center_x, center_y))
+                        gold -= tower_cost
 
 
     # 배경 그리기 및 경로 출력
