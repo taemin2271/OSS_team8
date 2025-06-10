@@ -105,6 +105,8 @@ house_image = pygame.transform.scale(house_image, (60, 60))
 house_pos = (path[-1][0] - 30, path[-1][1] - 30)  # 도착 지점 위치
 next_wave_button = Button(pygame.Rect(600, 800, 160, 50), "Next Wave", pygame.Color("green"), pygame.Color("white"), 30)
 next_wave_button.create_image()
+pause_button = Button(pygame.Rect(800, 800, 160, 50), "Pause", pygame.Color("orange"), pygame.Color("white"), 30)
+pause_button.create_image()
 
 # 메인 게임 루프
 running = True
@@ -191,11 +193,14 @@ while running:
             center_x = tile_x * TILE_SIZE + TILE_SIZE // 2
             center_y = tile_y * TILE_SIZE + TILE_SIZE // 2
 
-            # Next Wave 버튼 클릭 처리 추가
+            # Next Wave 버튼 클릭 처리
             if next_wave_button.rect.collidepoint(mouse_pos):
                 if wave_manager.is_wave_cleared() and not enemies:
                     wave_manager.start_next_wave()
                     waves_started = True
+            # Pause 버튼 클릭 처리 추가
+            elif pause_button.rect.collidepoint(mouse_pos):
+                game_state = "paused"
             elif shop_button.rect.collidepoint(mouse_pos):
                 shop_open = not shop_open
             elif shop_open:
@@ -275,6 +280,10 @@ while running:
         next_wave_button.bg_color = pygame.Color("darkgray")
     next_wave_button.create_image()
     win.blit(next_wave_button.image, next_wave_button.rect)
+
+    # Pause 버튼 렌더링 추가
+    pause_button.create_image()
+    win.blit(pause_button.image, pause_button.rect)
 
         # ✅ 클리어 조건 검사 위치 (여기 이동!)
     if wave_manager.get_wave_number() == MAX_WAVES and wave_manager.is_wave_cleared() and not enemies:
