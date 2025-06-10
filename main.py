@@ -57,7 +57,14 @@ def is_valid_tower_position(pos):
 
 # 적 스폰 함수 (웨이브 매니저가 호출)
 def spawn_enemy(wave_number):
-    enemy = Enemy(path[0][0], path[0][1], path, hp=80 + wave_number * 10)
+    base_hp = 80  # 기본 체력
+    hp_increment = wave_number * 20  # 웨이브당 체력 증가량
+    
+    if wave_number == MAX_WAVES:  # 마지막 웨이브는 보스 출현
+        enemy = Enemy(path[0][0], path[0][1], path, hp=1000, is_boss=True)  # 보스 체력 1000
+    else:
+        enemy = Enemy(path[0][0], path[0][1], path, hp=base_hp + hp_increment)
+    
     enemies.append(enemy)
 
 # 게임 상태 초기화 함수
