@@ -87,7 +87,7 @@ def is_tower_at_position(x, y):
 
 # 게임 설정 상수
 MAX_WAVES = 10  # 최대 웨이브 수
-MAX_ESCAPED = 2  # 허용 가능한 탈출 수
+MAX_ESCAPED = 5  # 허용 가능한 탈출 수
 font = pygame.font.Font(None, 40)  # 텍스트 폰트
 
 # 씬 인스턴스 생성
