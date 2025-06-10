@@ -10,12 +10,13 @@ from Scene import *  # 메인 메뉴 씬
 
 # Pygame 초기화 및 창 설정
 pygame.init()
-win = pygame.display.set_mode((1500, 1000))
+win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen_size = win.get_size()
 clock = pygame.time.Clock()
 
 # 타일 설정
 TILE_SIZE = 50
-screen_size = (1500, 1000)
+
 
 # 적이 이동할 경로 좌표 정의 (그리드 기준)
 tile_path = [
@@ -102,9 +103,20 @@ reset_game()
 tower_models = [Tower(0, 0), SniperTower(0, 0), SlowTower(0, 0)]  # 타워 모델 리스트
 selected_tower_index = 0
 shop_open = False
-shop_button = Button(pygame.Rect(1320, 20, 160, 60), "Shop", pygame.Color("blue"), pygame.Color("white"), 30)
+# Shop 폭 설정
+shop_width = 500
+shop_height = 400
+
+
+# 화면 오른쪽 끝에서 여백 20 남기고 배치
+shop_x = screen_size[0] - shop_width - 20
+shop_y = 100
+
+shop_button = Button(pygame.Rect(screen_size[0] - 180, 20, 160, 60), "Shop", pygame.Color("blue"), pygame.Color("white"), 30)
 shop_button.create_image()
-shop = Shop(win, pygame.Rect(1050, 100, 400, 800), tower_models)
+
+shop = Shop(win, pygame.Rect(shop_x, shop_y, shop_width, shop_height), tower_models)
+
 gold_text = TextDisplay(pygame.Rect(20, 800, 200, 50), f"Gold: {gold}", pygame.Color("gold"), 36)
 gold_text.create_image()
 house_image = pygame.image.load("assets/house.png")
@@ -192,7 +204,10 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
-                game_state = "paused"  # 일시정지 전환
+                game_state = "paused"
+            elif event.key == pygame.K_ESCAPE:
+                running = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()
             tile_x = mouse_pos[0] // TILE_SIZE
