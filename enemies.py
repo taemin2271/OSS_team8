@@ -1,30 +1,36 @@
 import pygame
 
 class Enemy:
-    def __init__(self, x, y, path, hp=100):
+    def __init__(self, x, y, path, hp=100, is_boss=False):
         # 초기 위치 및 경로 설정
         self.x = x
         self.y = y
         self.path = path
         self.path_index = 0
+        self.is_boss = is_boss
 
-        # ✅ 적 이미지 불러오기
-        raw_img = pygame.image.load("./assets/enemy1.png").convert_alpha()
-        self.img = pygame.transform.smoothscale(raw_img, (50, 50))  # 폭발 이미지와 동일한 크기
+        # 이미지 설정 - 보스와 일반 몬스터 구분
+        if is_boss:
+            raw_img = pygame.image.load("./assets/boss.png").convert_alpha()
+            self.img = pygame.transform.smoothscale(raw_img, (60, 60))  # 보스는 더 크게
+            self.speed = 3.0  # 보스는 더 빠르게
+        else:
+            raw_img = pygame.image.load("./assets/enemy1.png").convert_alpha()
+            self.img = pygame.transform.smoothscale(raw_img, (50, 50))
+            self.speed = 1.0
 
         # 체력 설정
         self.hp = hp
         self.max_hp = hp
         self.alive = True
-        self.speed = 1.0
+        self.gold_given = False  
 
-        # ✅ 폭파 애니메이션 관련 변수
+        # 폭발 애니메이션 관련 변수
         self.exploding = False
         self.explosion_frames = self.load_explosion_frames()
         self.explosion_index = 0
         self.explosion_frame_delay = 2
         self.explosion_frame_count = 0
-        self.gold_given = False  # 골드 중복 지급 방지
 
     def load_explosion_frames(self):
         # ✅ 250x250 스프라이트 시트를 50x50 크기로 25프레임 자르기
@@ -54,11 +60,12 @@ class Enemy:
         win.blit(self.img, (self.x - self.img.get_width() // 2, self.y - self.img.get_height() // 2))
 
         # 체력 바 그리기
-        bar_width = 40
-        bar_height = 6
+        bar_width = 80 if self.is_boss else 40
+        bar_height = 8 if self.is_boss else 6
+        bar_y_offset = 50 if self.is_boss else 40
         health_ratio = max(self.hp / self.max_hp, 0)
-        pygame.draw.rect(win, (255, 0, 0), (self.x - bar_width // 2, self.y - 40, bar_width, bar_height))
-        pygame.draw.rect(win, (0, 255, 0), (self.x - bar_width // 2, self.y - 40, bar_width * health_ratio, bar_height))
+        pygame.draw.rect(win, (255, 0, 0), (self.x - bar_width // 2, self.y - bar_y_offset, bar_width, bar_height))
+        pygame.draw.rect(win, (0, 255, 0), (self.x - bar_width // 2, self.y - bar_y_offset, bar_width * health_ratio, bar_height))
 
     def update(self):
         # ✅ 처치된 적은 폭발 애니메이션만 실행
